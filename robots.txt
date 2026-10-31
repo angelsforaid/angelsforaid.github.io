@@ -1,4 +1,5 @@
 User-agent: *
 Disallow: /angelsforaid/
+Disallow: /heaven-sent.html
 
 Sitemap: https://angelsforaid.github.io/sitemap.xml

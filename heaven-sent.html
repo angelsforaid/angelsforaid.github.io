@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Heaven Sent issue builder · Angels for Aid</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪽</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@300;400;500&family=Pinyon+Script&family=Playfair+Display:wght@400;600;700&display=swap">
+<style>
+/* Layout: questions in silver-rimmed pearl cards on the left, the finished blog post on a sheet on the right (stacked with a toggle on phones).
+   Palette and type follow the Angels for Aid site: pearl, blush, rose, metallic silver; Cormorant + Pinyon Script + Montserrat.
+   The brand is a single light look, so this page commits to it in every viewer theme. */
+:root {
+  color-scheme: light;
+  --white: #ffffff;
+  --pearl: #fffafc;
+  --blush: #fdf1f5;
+  --petal: #f9e1ea;
+  --rose: #ecbfcf;
+  --rose-deep: #b97b93;
+  --silver-light: #ececf2;
+  --silver: #c4c4d0;
+  --silver-dark: #8c8c9e;
+  --ink: #4b3b45;
+  --muted: #8a7680;
+  --metal: linear-gradient(180deg, #ffffff 0%, #dcdce6 28%, #9d9db0 50%, #eeeef4 62%, #b4b4c4 82%, #e6e6ee 100%);
+  --silver-border: linear-gradient(135deg, #ffffff, #c4c4d0 30%, #ffffff 50%, #b2b2c2 75%, #f2f2f6);
+  --glow: 0 10px 40px rgba(233, 170, 195, .28), 0 2px 8px rgba(160, 160, 180, .12);
+
+  --display: "Cormorant Garamond", "Cormorant", "Didot", Georgia, serif;
+  --script: "Pinyon Script", "Snell Roundhand", "Apple Chancery", cursive;
+  --sans: "Montserrat", "Helvetica Neue", system-ui, sans-serif;
+  --f-post: "Playfair Display", Georgia, "Times New Roman", serif;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+body {
+  background:
+    radial-gradient(70rem 30rem at 50% -8rem, var(--petal), transparent 70%),
+    linear-gradient(180deg, var(--blush), var(--pearl) 40rem) var(--pearl);
+  color: var(--ink);
+  font: 300 15px/1.7 var(--sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 64px;
+}
+::selection { background: var(--petal); color: var(--ink); }
+button, input, textarea, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--rose); outline-offset: 2px; }
+.rim { border: 1px solid transparent; background: linear-gradient(var(--white), var(--white)) padding-box, var(--silver-border) border-box; }
+
+/* ---------- ticker + masthead ---------- */
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.home-link { display: inline-block; margin-bottom: 44px; font: 400 .62rem/1 var(--sans); letter-spacing: .28em; text-transform: uppercase; color: var(--silver-dark); text-decoration: none; }
+.home-link:hover { color: var(--rose-deep); }
+.ticker { margin-left: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); margin-right: calc(-1 * max(16px, env(safe-area-inset-right, 0px))); overflow: hidden; white-space: nowrap; background: var(--white); border-bottom: 1px solid var(--silver-light); color: var(--silver-dark); font: 400 10.5px/1 var(--sans); letter-spacing: .38em; text-transform: uppercase; }
+.ticker-track { display: inline-flex; animation: ticker 60s linear infinite; }
+.ticker span { padding: 11px 20px; }
+.ticker .star { color: var(--rose); padding-inline: 0; }
+@keyframes ticker { to { transform: translateX(-50%); } }
+
+.masthead { max-width: 1280px; margin: 0 auto; padding-block: 52px 30px; text-align: center; position: relative; }
+.mh { position: relative; display: inline-block; line-height: 1; margin: 0; font-weight: 300; }
+.mh-halo { position: absolute; left: 50%; top: -30px; width: 108px; height: 32px; transform: translateX(-50%) rotate(-4deg); filter: drop-shadow(0 0 8px #fff) drop-shadow(0 0 14px rgba(236,191,207,.8)); animation: bob 4.5s ease-in-out infinite; }
+@keyframes bob { 50% { transform: translateX(-50%) rotate(-1deg) translateY(-6px); } }
+.mh-word { display: block; font: 300 clamp(2.8rem, 9vw, 5.4rem)/1 var(--display); letter-spacing: .16em; padding-left: .16em; text-transform: uppercase; background: var(--metal); background-size: 100% 220%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: sheen 6s ease-in-out infinite; filter: drop-shadow(0 2px 0 rgba(255,255,255,.9)) drop-shadow(0 6px 18px rgba(201,140,165,.35)); }
+@keyframes sheen { 50% { background-position: 0 100%; } }
+.mh-script { display: block; font: 400 clamp(2rem, 5.5vw, 3.4rem)/1 var(--script); color: var(--rose-deep); margin-top: -.18em; text-shadow: 0 0 20px #fff; }
+.label { font: 400 .66rem/1.4 var(--sans); letter-spacing: .42em; text-transform: uppercase; color: var(--silver-dark); margin: 22px 0 0; }
+.label::before, .label::after { content: "✦"; color: var(--rose); letter-spacing: 0; margin: 0 12px; }
+.head-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 24px; }
+
+.btn { border: 1px solid transparent; background: linear-gradient(rgba(255,255,255,.7), rgba(255,255,255,.7)) padding-box, var(--silver-border) border-box; color: var(--silver-dark); border-radius: 999px; padding: 12px 22px; font: 400 .66rem/1 var(--sans); letter-spacing: .26em; text-transform: uppercase; cursor: pointer; transition: transform .25s, box-shadow .25s, color .2s; }
+.btn:hover { transform: translateY(-1px); color: var(--rose-deep); box-shadow: 0 10px 26px rgba(233,170,195,.4); }
+.btn.primary { color: var(--ink); background: linear-gradient(135deg, #fff 0%, var(--petal) 45%, #fff 70%, var(--rose) 130%) padding-box, var(--silver-border) border-box; box-shadow: var(--glow); }
+.btn.danger-armed { color: var(--rose-deep); background: linear-gradient(var(--petal), var(--petal)) padding-box, var(--silver-border) border-box; }
+
+.banner { max-width: 1280px; margin: 0 auto 24px; padding: 14px 22px; border-radius: 999px; background: linear-gradient(rgba(255,255,255,.85), rgba(255,255,255,.85)) padding-box, var(--silver-border) border-box; border: 1px solid transparent; box-shadow: var(--glow); font-size: .88rem; display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; }
+.banner strong { font: 400 1.5rem/1 var(--script); color: var(--rose-deep); margin-right: 4px; }
+
+/* ---------- mobile toggle ---------- */
+.viewtoggle { display: none; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; margin: 0 auto 18px; max-width: 420px; border-radius: 999px; padding: 4px; box-shadow: var(--glow); }
+.viewtoggle button { flex: 1; border: 0; background: transparent; padding: 10px 0; border-radius: 999px; font: 400 .66rem/1 var(--sans); letter-spacing: .26em; text-transform: uppercase; color: var(--silver-dark); cursor: pointer; }
+.viewtoggle button[aria-pressed="true"] { background: linear-gradient(135deg, #fff, var(--petal) 50%, var(--rose)); color: var(--ink); }
+
+/* ---------- layout ---------- */
+.layout { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 36px; align-items: start; }
+.form-col { display: grid; gap: 24px; min-width: 0; }
+.preview-col { position: sticky; top: 20px; min-width: 0; display: grid; gap: 14px; }
+
+/* ---------- form cards ---------- */
+.card { border-radius: 28px; padding: 30px 30px 24px; box-shadow: var(--glow); }
+.card-head { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: baseline; justify-content: space-between; margin-bottom: 4px; }
+.card h2 { font: 300 2.2rem/1.05 var(--display); margin: 0; text-wrap: balance; }
+.card h2 em { font: 400 1.15em/1 var(--script); font-style: normal; color: var(--rose-deep); }
+.card .hint { color: var(--muted); font-size: .88rem; margin: 8px 0 18px; max-width: 60ch; }
+.team-card { background: linear-gradient(var(--blush), var(--blush)) padding-box, var(--silver-border) border-box; }
+.eyebrow { font: 400 .62rem/1 var(--sans); letter-spacing: .38em; text-transform: uppercase; color: var(--rose-deep); }
+.eyebrow::before { content: "✦"; color: var(--rose); letter-spacing: 0; margin-right: 10px; }
+
+.chip { font: 400 .62rem/1 var(--sans); letter-spacing: .2em; text-transform: uppercase; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--silver-light); color: var(--silver-dark); background: var(--white); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.chip.done { border-color: transparent; background: var(--petal); color: var(--rose-deep); }
+
+.field { display: grid; gap: 4px; padding-block: 14px; }
+.field + .field { border-top: 1px solid var(--silver-light); }
+.field label, .field .label-t { font: 500 1.22rem/1.3 var(--display); color: var(--ink); }
+.field .sub { font-size: .8rem; color: var(--muted); }
+.field input[type=text], .field textarea, .field select {
+  width: 100%; border: 0; border-bottom: 1px solid var(--silver); background: transparent;
+  padding: 8px 2px; border-radius: 0; resize: none; line-height: 1.55; font-weight: 400; transition: border-color .15s;
+}
+.field ::placeholder { color: #b9aab1; }
+.field select { border: 1px solid var(--silver-light); border-radius: 14px; padding: 9px 12px; background: var(--white); }
+.field textarea { min-height: 2.6em; overflow: hidden; }
+.field input[type=text]:focus, .field textarea:focus { outline: none; border-bottom: 2px solid var(--rose); padding-bottom: 7px; }
+.field.answered > label::after { content: "✦"; color: var(--rose); font-size: .7em; margin-left: 8px; vertical-align: middle; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 22px; }
+.row2 .field + .field { border-top: 0; }
+
+/* photos */
+.drop { display: block; border: 1.5px dashed var(--rose); border-radius: 22px; padding: 26px; text-align: center; color: var(--muted); cursor: pointer; background: var(--blush); transition: background .15s; }
+.drop:hover, .drop.over { background: var(--petal); }
+.drop strong { display: block; font: 400 1.9rem/1.1 var(--script); color: var(--rose-deep); font-weight: 400; }
+.thumbs { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; margin-top: 16px; }
+.thumb { position: relative; aspect-ratio: 4/5; max-width: 100%; padding: 4px; border-radius: 80px 80px 14px 14px; background: var(--silver-border); box-shadow: var(--glow); }
+.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 76px 76px 10px 10px; }
+.thumb .tag { position: absolute; left: 50%; bottom: 40px; transform: translateX(-50%); font: 400 .56rem/1 var(--sans); letter-spacing: .24em; text-transform: uppercase; background: var(--white); color: var(--rose-deep); padding: 5px 9px; border-radius: 999px; }
+.thumb .ctrls { position: absolute; inset: auto 8px 8px 8px; display: flex; gap: 4px; justify-content: space-between; }
+.thumb .ctrls button { border: 0; background: var(--white); color: var(--ink); border-radius: 999px; width: 28px; height: 28px; cursor: pointer; font-size: .95rem; line-height: 1; }
+
+/* ---------- preview ---------- */
+.preview-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+.preview-bar h2 { font: 300 2rem/1 var(--display); margin: 0; }
+.preview-bar h2 em { font: 400 1.2em/1 var(--script); font-style: normal; color: var(--rose-deep); }
+.copy-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.checklist { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.checklist li { font: 400 .6rem/1 var(--sans); letter-spacing: .18em; text-transform: uppercase; padding: 6px 11px; border-radius: 999px; border: 1px solid var(--silver-light); background: var(--white); color: var(--silver-dark); }
+.checklist li.ok { border-color: transparent; background: var(--petal); color: var(--rose-deep); }
+.checklist li.ok::before { content: "✦ "; }
+
+.sheet { border-radius: 24px; box-shadow: var(--glow), inset 0 0 0 8px #fff, inset 0 0 0 9px var(--silver-light); padding: clamp(26px, 4vw, 52px); max-height: calc(100vh - 180px); overflow-y: auto; }
+
+/* the post itself — matches the A4A blog style */
+.post { font-family: var(--f-post); color: var(--ink); font-size: 15.5px; line-height: 1.6; max-width: 62ch; margin: 0 auto; }
+.post h1 { font-size: clamp(1.45rem, 2.6vw, 1.9rem); line-height: 1.3; font-weight: 700; margin: 0 0 22px; text-wrap: balance; }
+.post p { margin: 0 0 18px; }
+.post .qa { margin: 0 0 20px; }
+.post .qa h3 { font-size: 1em; font-weight: 700; margin: 0 0 2px; }
+.post .qa p { margin: 0; }
+.post h2 { font-size: 1.08em; font-weight: 700; margin: 34px 0 14px; }
+.post h4 { font-size: 1em; font-weight: 700; margin: 0 0 6px; }
+.post .explain { font-weight: 700; }
+.post a { color: var(--rose-deep); }
+.post .photos { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; margin: 26px 0; }
+.post .photos img { width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: 4px; display: block; }
+.post .cover { margin: 4px 0 26px; }
+.post .cover img { width: 100%; max-height: 520px; object-fit: cover; border-radius: 4px; display: block; }
+.post ul { padding-left: 1.2em; margin: 0 0 18px; }
+.post .empty { color: var(--muted); font-style: italic; }
+
+.toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 20px); opacity: 0; background: var(--white); color: var(--ink); border: 1px solid var(--rose); box-shadow: var(--glow); padding: 11px 22px; border-radius: 999px; font-size: .85rem; transition: opacity .2s, transform .2s; pointer-events: none; z-index: 20; max-width: calc(100% - 32px); text-align: center; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+.codebox { width: 100%; min-height: 160px; font: 12px/1.4 ui-monospace, Menlo, monospace; border: 1px solid var(--silver-light); border-radius: 14px; padding: 10px; background: var(--white); }
+
+footer.note { max-width: 1280px; margin: 48px auto 0; text-align: center; display: grid; gap: 6px; justify-items: center; }
+footer.note .xoxo { font: 400 2.4rem/1 var(--script); color: var(--rose-deep); }
+footer.note p { margin: 0; color: var(--muted); font-size: .82rem; }
+footer.note .addr { user-select: all; color: var(--ink); border-bottom: 1px solid var(--rose); letter-spacing: .08em; }
+
+
+/* ---------- send + inbox ---------- */
+.send-card { text-align: center; }
+.send-card .card-head { justify-content: center; }
+.send-card .hint { margin-inline: auto; }
+.send-status { font-size: .85rem; color: var(--muted); margin: 14px auto 0; max-width: 52ch; }
+.send-status.ok { color: var(--rose-deep); }
+.btn:disabled { opacity: .5; cursor: default; transform: none; box-shadow: none; }
+.btn .count { display: inline-block; min-width: 1.7em; margin-left: 8px; padding: 3px 6px; border-radius: 999px; background: var(--rose-deep); color: var(--white); letter-spacing: 0; font-variant-numeric: tabular-nums; }
+
+.inbox { max-width: 1080px; margin: 0 auto; }
+.inbox-head { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: end; justify-content: space-between; margin-bottom: 22px; }
+.inbox-head h2 { font: 300 clamp(2.4rem, 5vw, 3.4rem)/1 var(--display); margin: 0; }
+.inbox-head h2 em { font: 400 1.15em/1 var(--script); font-style: normal; color: var(--rose-deep); }
+.filters { display: flex; gap: 6px; flex-wrap: wrap; }
+.filters button { border: 1px solid var(--silver-light); background: var(--white); color: var(--silver-dark); border-radius: 999px; padding: 8px 14px; font: 400 .62rem/1 var(--sans); letter-spacing: .22em; text-transform: uppercase; cursor: pointer; }
+.filters button[aria-pressed="true"] { background: var(--petal); border-color: transparent; color: var(--rose-deep); }
+.subs { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 20px; }
+.sub-card { border-radius: 26px; padding: 18px 20px 18px; box-shadow: var(--glow); display: grid; grid-template-columns: 64px minmax(0,1fr); gap: 6px 16px; align-items: start; }
+.sub-pic { grid-row: span 2; width: 64px; height: 80px; border-radius: 40px 40px 10px 10px; object-fit: cover; background: radial-gradient(circle at 50% 30%, #fff, var(--petal) 70%); display: grid; place-items: center; font: 300 1.6rem/1 var(--display); color: var(--rose-deep); }
+.sub-name { font: 400 1.6rem/1.1 var(--display); margin: 0; overflow-wrap: anywhere; }
+.sub-meta { font-size: .8rem; color: var(--muted); margin: 2px 0 0; overflow-wrap: anywhere; }
+.sub-stats { grid-column: 2; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.sub-actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; padding-top: 12px; border-top: 1px solid var(--silver-light); }
+.sub-actions .btn { padding: 10px 14px; font-size: .58rem; }
+.chip.new { background: var(--rose-deep); color: var(--white); border-color: transparent; }
+.empty-inbox { text-align: center; padding: 56px 24px; border-radius: 28px; box-shadow: var(--glow); }
+.empty-inbox .script { font: 400 2.6rem/1 var(--script); color: var(--rose-deep); margin: 0 0 8px; }
+.empty-inbox p { margin: 0 auto; max-width: 46ch; color: var(--muted); }
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: minmax(0,1fr); }
+  .viewtoggle { display: flex; }
+  .preview-col { position: static; }
+  .sheet { max-height: none; }
+  .layout[data-view="form"] .preview-col { display: none; }
+  .layout[data-view="post"] .form-col { display: none; }
+}
+@media (max-width: 520px) {
+  .row2 { grid-template-columns: 1fr; }
+  .row2 .field + .field { border-top: 1px solid var(--silver-light); }
+  .card { padding: 24px 20px 18px; border-radius: 24px; }
+  .masthead { padding-block: 44px 22px; }
+  .mh-word { letter-spacing: .1em; padding-left: .1em; }
+  .banner { border-radius: 24px; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+/* ---------- write page ---------- */
+.write { max-width: 760px; margin: 0 auto; display: grid; gap: 24px; }
+.field textarea.piece { min-height: 16em; overflow: auto; resize: vertical; font: 400 1.05rem/1.75 var(--f-post); }
+.field .count { justify-self: end; font-size: .75rem; color: var(--silver-dark); font-variant-numeric: tabular-nums; }
+.req { color: var(--rose-deep); margin-left: 4px; }
+.checks { display: grid; gap: 12px; padding-block: 8px 4px; }
+.check { display: flex; gap: 12px; align-items: flex-start; font-size: .9rem; cursor: pointer; }
+.check input { margin-top: 4px; width: 18px; height: 18px; accent-color: var(--rose-deep); flex: none; }
+.guide { margin: 0; padding-left: 1.1em; color: var(--muted); font-size: .88rem; display: grid; gap: 4px; }
+.field select { width: 100%; }
+
+/* ---------- issue builder ---------- */
+.field textarea.long { min-height: 7em; overflow: auto; resize: vertical; }
+.story { border: 1px dashed var(--rose); border-radius: 20px; padding: 6px 18px 14px; margin-top: 12px; background: var(--blush); }
+.story-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding-top: 10px; }
+.story-head strong { font: 400 1.5rem/1 var(--script); color: var(--rose-deep); }
+.mini { border: 0; background: transparent; color: var(--silver-dark); cursor: pointer; font: 400 .62rem/1 var(--sans); letter-spacing: .2em; text-transform: uppercase; padding: 8px; }
+.mini:hover { color: var(--rose-deep); }
+.add-row { margin-top: 14px; }
+.copy-fields { display: grid; gap: 8px; }
+.copy-field { display: grid; grid-template-columns: 80px minmax(0,1fr) auto; gap: 10px; align-items: center; font-size: .85rem; }
+.copy-field span:first-child { font: 400 .6rem/1 var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--silver-dark); }
+.copy-field .val { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink); }
+.copy-field .btn { padding: 8px 12px; font-size: .56rem; }
+.post .issue-line { font-style: italic; color: var(--muted); font-size: .9em; }
+.post hr { border: 0; border-top: 1px solid var(--silver-light); margin: 30px 0; }
+.post h2.sec { font-size: .72em; letter-spacing: .3em; text-transform: uppercase; color: var(--rose-deep); font-weight: 600; margin: 0 0 12px; }
+.post h3 { font-size: 1.25em; font-weight: 700; margin: 0 0 10px; line-height: 1.3; }
+.post blockquote { margin: 0 0 14px; padding: 4px 0 4px 18px; border-left: 3px solid var(--rose); font-style: italic; font-size: 1.1em; }
+.post blockquote p { margin: 0; }
+.post .issue-title { font-size: clamp(1.5rem, 2.6vw, 2rem); font-weight: 700; line-height: 1.2; margin: 0 0 6px; }
+.post .issue-sub { color: var(--muted); font-size: 1.05em; margin: 0 0 22px; }
+.substack-note { font-size: .8rem; color: var(--muted); margin: 0; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="silver" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f4f4f8"/><stop offset=".45" stop-color="#b9b9c8"/><stop offset=".55" stop-color="#e8e8ef"/><stop offset="1" stop-color="#a3a3b5"/>
+    </linearGradient>
+    <symbol id="halo" viewBox="0 0 100 30">
+      <ellipse cx="50" cy="15" rx="44" ry="10" fill="none" stroke="url(#silver)" stroke-width="3.5"/>
+      <ellipse cx="50" cy="15" rx="44" ry="10" fill="none" stroke="#fff" stroke-width="1.2" stroke-dasharray="14 70" stroke-linecap="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
+
+<header class="masthead">
+  <a class="home-link" href="./">← Angels for Aid</a><br>
+  <h1 class="mh">
+    <svg class="mh-halo"><use href="#halo"/></svg>
+    <span class="mh-word">Heaven</span>
+    <span class="mh-script">sent</span>
+  </h1>
+  <p class="label">Issue builder · for the A4A team</p>
+  <div class="head-actions">
+    <button class="btn" id="btn-clear" type="button">Start a new issue</button>
+  </div>
+</header>
+
+<div class="viewtoggle rim" role="group" aria-label="View">
+  <button type="button" id="v-form" aria-pressed="true">Sections</button>
+  <button type="button" id="v-post" aria-pressed="false">Preview</button>
+</div>
+
+<main class="layout" id="layout" data-view="form">
+  <form class="form-col" id="form" autocomplete="off">
+
+    <section class="card rim">
+      <div class="card-head"><h2>The <em>issue</em></h2></div>
+      <p class="hint">Fill in only the sections this issue needs. Empty sections are left out of the newsletter.</p>
+      <div class="row2">
+        <div class="field"><label for="num">Issue number</label><input type="text" id="num" data-key="num" inputmode="numeric" placeholder="12"></div>
+        <div class="field"><label for="date">Date</label><input type="text" id="date" data-key="date" placeholder="November 2, 2026"></div>
+      </div>
+      <div class="field"><label for="title">Title</label><span class="sub">Goes in Substack’s title box</span><input type="text" id="title" data-key="title" placeholder="What the midterms mean for you"></div>
+      <div class="field"><label for="subtitle">Subtitle</label><span class="sub">Goes in Substack’s subtitle box</span><input type="text" id="subtitle" data-key="subtitle"></div>
+    </section>
+
+    <section class="card rim">
+      <div class="card-head"><h2>Opening <em>note</em></h2></div>
+      <div class="row2">
+        <div class="field"><label for="greeting">Greeting</label><input type="text" id="greeting" data-key="greeting" placeholder="Hi angels,"></div>
+        <div class="field"><label for="signer">Signed by</label><input type="text" id="signer" data-key="signer" placeholder="Emma"></div>
+      </div>
+      <div class="field"><label for="note">Note</label><span class="sub">A few lines on what’s in this issue and why it matters this week.</span><textarea class="long" id="note" data-key="note"></textarea></div>
+    </section>
+
+    <section class="card rim">
+      <div class="card-head"><h2>In the <em>news</em></h2></div>
+      <p class="hint">For current events you write up yourselves, like an election, a new law or a crisis. Add up to four stories.</p>
+      <div id="stories"></div>
+      <button class="btn add-row" type="button" id="add-story">Add a story</button>
+    </section>
+
+    <section class="card rim">
+      <div class="card-head"><h2>From an angel <em>author</em></h2></div>
+      <p class="hint">A submitted piece. In the Google Sheet, copy the piece’s “Ready for Substack” cell and paste it here to fill this in.</p>
+      <div class="field"><label for="paste">Paste from the sheet</label><textarea id="paste" rows="2" placeholder="Paste the Ready for Substack cell"></textarea></div>
+      <div class="field"><label for="pTitle">Piece title</label><input type="text" id="pTitle" data-key="pTitle"></div>
+      <div class="row2">
+        <div class="field"><label for="pAuthor">Angel author</label><input type="text" id="pAuthor" data-key="pAuthor"></div>
+        <div class="field"><label for="pHandle">Substack handle</label><input type="text" id="pHandle" data-key="pHandle" placeholder="@handle"></div>
+      </div>
+      <div class="field"><label for="pBody">The piece</label><textarea class="long" id="pBody" data-key="pBody"></textarea></div>
+      <div class="field"><label for="pBio">About the angel author</label><textarea id="pBio" data-key="pBio" rows="2"></textarea></div>
+    </section>
+
+    <section class="card rim">
+      <div class="card-head"><h2>Angel advocate <em>spotlight</em></h2></div>
+      <div class="row2">
+        <div class="field"><label for="aName">Angel advocate</label><input type="text" id="aName" data-key="aName"></div>
+        <div class="field"><label for="aCause">Their cause</label><input type="text" id="aCause" data-key="aCause"></div>
+      </div>
+      <div class="field"><label for="aQuote">Favorite quote from their feature</label><textarea id="aQuote" data-key="aQuote" rows="2"></textarea></div>
+      <div class="field"><label for="aBlurb">A line about them</label><textarea id="aBlurb" data-key="aBlurb" rows="2"></textarea></div>
+      <div class="field"><label for="aLink">Link to their full feature</label><input type="text" id="aLink" data-key="aLink" placeholder="https://"></div>
+    </section>
+
+    <section class="card rim">
+      <div class="card-head"><h2>Ways to <em>help</em></h2></div>
+      <div class="field"><label for="hIntro">Intro line</label><input type="text" id="hIntro" data-key="hIntro" placeholder="Want to do something this week? Start here."></div>
+      <div class="field"><label for="hOrgs">Organizations or actions</label><span class="sub">One per line: name, then a link. Example: Vote.org, https://www.vote.org</span><textarea class="long" id="hOrgs" data-key="hOrgs"></textarea></div>
+    </section>
+
+    <section class="card rim">
+      <div class="card-head"><h2>Quick <em>reads</em></h2></div>
+      <div class="field"><label for="reads">Links worth reading</label><span class="sub">One per line: title, then a link.</span><textarea class="long" id="reads" data-key="reads"></textarea></div>
+    </section>
+  </form>
+
+  <aside class="preview-col" aria-label="Newsletter preview">
+    <div class="preview-bar">
+      <h2>The <em>issue</em></h2>
+      <div class="copy-row">
+        <button class="btn primary" type="button" id="copy-body">Copy for Substack</button>
+      </div>
+    </div>
+    <div class="copy-fields">
+      <div class="copy-field"><span>Title</span><span class="val" id="v-title">—</span><button class="btn" type="button" data-copy="title">Copy</button></div>
+      <div class="copy-field"><span>Subtitle</span><span class="val" id="v-subtitle">—</span><button class="btn" type="button" data-copy="subtitle">Copy</button></div>
+    </div>
+    <p class="substack-note">In Substack, start a new post. Paste the title and subtitle into their boxes, then click into the body and paste the issue.</p>
+    <div class="sheet rim"><article class="post" id="post"></article></div>
+  </aside>
+</main>
+
+<footer class="note"><span class="xoxo">xoxo</span><p>This draft is saved in this browser. Start a new issue to clear it.</p></footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const SITE = "https://angelsforaid.github.io";
+const STORE = "a4a-heaven-sent-draft-v1";
+const MAX_STORIES = 4;
+const $ = s => document.querySelector(s);
+let state = { stories: [{}] };
+
+(function () {
+  const w = ["Heaven Sent", "Issue builder", "Angel Authors", "Angel Advocates", "Angels for Aid"];
+  const one = w.map(x => `<span>${x}</span><span class="star">✦</span>`).join("");
+  $("#ticker").innerHTML = one + one + one + one;
+})();
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const v = (k, o = state) => (typeof o[k] === "string" ? o[k] : "").trim();
+const lines = t => t.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+const paras = t => lines(t).map(l => `<p>${linkify(l)}</p>`).join("");
+const quote = s => { s = s.trim().replace(/^["“”']+|["“”']+$/g, "").trim(); return s ? "“" + s + "”" : ""; };
+function linkify(t) { return esc(t).replace(/(https?:\/\/[^\s<]+)/g, u => `<a href="${u}">${u}</a>`); }
+function links(text) {
+  return lines(text).map(l => {
+    const m = l.match(/(https?:\/\/\S+|www\.\S+)/i);
+    const url = m ? (m[1].startsWith("http") ? m[1] : "https://" + m[1]) : "";
+    const name = (m ? l.replace(m[1], "") : l).replace(/[\s,–—\-:|]+$/, "").trim() || url;
+    return { name, url };
+  });
+}
+const linkHtml = o => o.url ? `<a href="${esc(o.url)}">${esc(o.name)}</a>` : esc(o.name);
+function autoGrow(t) { if (t.classList.contains("long")) return; t.style.height = "auto"; t.style.height = t.scrollHeight + 2 + "px"; }
+let toastTimer;
+function toast(m) { const t = $("#toast"); t.textContent = m; t.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2600); }
+function save() { try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (_) {} }
+const possessive = n => n + (/s$/i.test(n) ? "’" : "’s");
+
+/* ---------- news stories ---------- */
+function renderStories() {
+  const box = $("#stories"); box.innerHTML = "";
+  state.stories.forEach((s, i) => {
+    const d = document.createElement("div"); d.className = "story";
+    d.innerHTML = `<div class="story-head"><strong>Story ${i + 1}</strong>${state.stories.length > 1 ? '<button type="button" class="mini" data-del>Remove</button>' : ""}</div>
+      <div class="field"><label for="s${i}-h">Headline</label><input type="text" id="s${i}-h" data-s="h"></div>
+      <div class="field"><label for="s${i}-what">What’s happening</label><span class="sub">The facts, in plain words. Assume readers haven’t been following.</span><textarea class="long" id="s${i}-what" data-s="what"></textarea></div>
+      <div class="field"><label for="s${i}-why">Why it matters</label><span class="sub">Who it affects, and why it matters to our readers.</span><textarea id="s${i}-why" data-s="why" rows="2"></textarea></div>
+      <div class="field"><label for="s${i}-act">What you can do</label><span class="sub">One action per line, like checking your registration or finding your polling place.</span><textarea id="s${i}-act" data-s="act" rows="2"></textarea></div>
+      <div class="field"><label for="s${i}-src">Sources</label><span class="sub">One per line: name, then a link.</span><textarea id="s${i}-src" data-s="src" rows="2"></textarea></div>`;
+    d.querySelectorAll("[data-s]").forEach(el => {
+      el.value = s[el.dataset.s] || "";
+      el.addEventListener("input", () => { s[el.dataset.s] = el.value; if (el.tagName === "TEXTAREA") autoGrow(el); render(); save(); });
+    });
+    const del = d.querySelector("[data-del]");
+    if (del) del.onclick = () => { state.stories.splice(i, 1); renderStories(); render(); save(); };
+    box.appendChild(d);
+    d.querySelectorAll("textarea").forEach(autoGrow);
+  });
+  $("#add-story").hidden = state.stories.length >= MAX_STORIES;
+}
+$("#add-story").addEventListener("click", () => { state.stories.push({}); renderStories(); save(); $(`#s${state.stories.length - 1}-h`).focus(); });
+
+/* ---------- the newsletter ---------- */
+function build() {
+  const sec = [];
+  const meta = ["Heaven Sent", v("num") ? "Issue " + v("num").replace(/^#/, "") : "", v("date")].filter(Boolean).join(" · ");
+  const top = `<p class="issue-line"><em>${esc(meta)}</em></p>`;
+
+  if (v("note")) sec.push(`<p>${esc(v("greeting") || "Hi angels,")}</p>${paras(v("note"))}${v("signer") ? `<p>xoxo, ${esc(v("signer"))}</p>` : ""}`);
+
+  const stories = state.stories.filter(s => v("h", s) || v("what", s));
+  if (stories.length) sec.push(`<h2 class="sec">In the news</h2>` + stories.map(s => {
+    let h = v("h", s) ? `<h3>${esc(v("h", s))}</h3>` : "";
+    if (v("what", s)) h += `<p><strong>What’s happening</strong></p>${paras(v("what", s))}`;
+    if (v("why", s)) h += `<p><strong>Why it matters</strong></p>${paras(v("why", s))}`;
+    const acts = lines(v("act", s));
+    if (acts.length) h += `<p><strong>What you can do</strong></p><ul>${acts.map(a => `<li>${linkify(a)}</li>`).join("")}</ul>`;
+    const src = links(v("src", s));
+    if (src.length) h += `<p><em>Sources: ${src.map(linkHtml).join(", ")}</em></p>`;
+    return h;
+  }).join("<p><br></p>"));
+
+  if (v("pTitle") || v("pBody")) {
+    let h = `<h2 class="sec">From an angel author</h2>`;
+    if (v("pTitle")) h += `<h3>${esc(v("pTitle"))}</h3>`;
+    if (v("pAuthor")) h += `<p><em>By ${esc(v("pAuthor"))}${v("pHandle") ? " (" + esc(v("pHandle")) + ")" : ""}</em></p>`;
+    h += paras(v("pBody"));
+    if (v("pBio")) h += `<p><em>About the angel author: ${esc(v("pBio"))}</em></p>`;
+    sec.push(h);
+  }
+
+  if (v("aName") || v("aQuote")) {
+    let h = `<h2 class="sec">Angel advocate spotlight</h2>`;
+    if (v("aQuote")) h += `<blockquote><p>${esc(quote(v("aQuote")))}</p></blockquote>`;
+    const who = [v("aName") ? `<strong>${esc(v("aName"))}</strong>` : "", esc(v("aCause"))].filter(Boolean).join(" · ");
+    if (who || v("aBlurb")) h += `<p>${who}${who && v("aBlurb") ? ". " : ""}${esc(v("aBlurb"))}</p>`;
+    const first = v("aName").split(/\s+/)[0];
+    if (v("aLink")) h += `<p><a href="${esc(v("aLink"))}">Read ${first ? esc(possessive(first)) : "the"} full feature →</a></p>`;
+    sec.push(h);
+  }
+
+  const orgs = links(v("hOrgs"));
+  if (orgs.length || v("hIntro")) sec.push(`<h2 class="sec">Ways to help</h2>${v("hIntro") ? `<p>${esc(v("hIntro"))}</p>` : ""}${orgs.length ? `<ul>${orgs.map(o => `<li>${linkHtml(o)}</li>`).join("")}</ul>` : ""}`);
+
+  const reads = links(v("reads"));
+  if (reads.length) sec.push(`<h2 class="sec">Quick reads</h2><ul>${reads.map(o => `<li>${linkHtml(o)}</li>`).join("")}</ul>`);
+
+  sec.push(`<p>Have an issue you could teach us about? <a href="${SITE}/write.html">Become an Angel Author</a>. Want to share your style and your cause? <a href="${SITE}/spotted.html">Become an Angel Advocate</a>.</p><p>xoxo,<br>Angels for Aid</p>`);
+  return top + sec.join("<hr>");
+}
+
+function render() {
+  $("#v-title").textContent = v("title") || "—";
+  $("#v-subtitle").textContent = v("subtitle") || "—";
+  $("#post").innerHTML = (v("title") ? `<p class="issue-title">${esc(v("title"))}</p>` : "") + (v("subtitle") ? `<p class="issue-sub">${esc(v("subtitle"))}</p>` : "") + build();
+}
+
+/* ---------- inputs ---------- */
+$("#form").addEventListener("input", e => {
+  const el = e.target, k = el.dataset && el.dataset.key; if (!k) return;
+  state[k] = el.value; if (el.tagName === "TEXTAREA") autoGrow(el); render(); save();
+});
+$("#form").addEventListener("submit", e => e.preventDefault());
+
+// Paste the sheet's "Ready for Substack" cell: title, subtitle, "By name (@handle)", the piece, then the bio.
+$("#paste").addEventListener("input", e => {
+  const raw = e.target.value.replace(/\r/g, "").split("\n");
+  if (raw.filter(l => l.trim()).length < 2) return;
+  const by = raw.findIndex(l => /^By\s+/.test(l.trim()));
+  const head = (by > -1 ? raw.slice(0, by) : raw.slice(0, 1)).map(l => l.trim()).filter(Boolean);
+  const rest = by > -1 ? raw.slice(by + 1) : raw.slice(1);
+  const bioAt = rest.findIndex(l => /^About the (angel author|writer):/i.test(l.trim()));
+  const imgAt = rest.findIndex(l => /^Images:/i.test(l.trim()));
+  const end = [bioAt, imgAt].filter(i => i > -1).reduce((a, b) => Math.min(a, b), rest.length);
+  state.pTitle = head[0] || "";
+  state.pAuthor = ""; state.pHandle = "";
+  if (by > -1) {
+    const m = raw[by].trim().replace(/^By\s+/, "").match(/^(.*?)(?:\s*\(([^)]+)\))?$/);
+    state.pAuthor = (m && m[1]) || ""; state.pHandle = (m && m[2]) || "";
+  }
+  state.pBody = rest.slice(0, end).join("\n").trim();
+  state.pBio = bioAt > -1 ? rest[bioAt].trim().replace(/^About the (angel author|writer):\s*/i, "") : "";
+  ["pTitle", "pAuthor", "pHandle", "pBody", "pBio"].forEach(k => { const el = $("#" + k); el.value = state[k]; autoGrow(el); });
+  e.target.value = ""; render(); save(); toast("Piece filled in.");
+});
+
+/* ---------- copy ---------- */
+function plain(html) {
+  const d = document.createElement("div");
+  d.innerHTML = html.replace(/<\/(p|h2|h3|li|blockquote)>/g, "$&\n").replace(/<hr>/g, "\n———\n").replace(/<br>/g, "\n");
+  return d.textContent.replace(/\n{3,}/g, "\n\n").trim();
+}
+$("#copy-body").addEventListener("click", () => {
+  const html = build(), text = plain(html);
+  const fallback = () => {
+    const r = document.createRange(); r.selectNodeContents($("#post")); const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+    let ok = false; try { ok = document.execCommand("copy"); } catch (_) {}
+    toast(ok ? "Copied. Paste it into the Substack post body." : "Selected. Press Ctrl+C (or ⌘C) to copy.");
+  };
+  try {
+    if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
+      navigator.clipboard.write([new ClipboardItem({ "text/html": new Blob([html], { type: "text/html" }), "text/plain": new Blob([text], { type: "text/plain" }) })])
+        .then(() => toast("Copied. Paste it into the Substack post body."), fallback);
+    } else fallback();
+  } catch (_) { fallback(); }
+});
+document.querySelectorAll("[data-copy]").forEach(b => b.addEventListener("click", () => {
+  const t = v(b.dataset.copy); if (!t) { toast("Add a " + b.dataset.copy + " first."); return; }
+  try { navigator.clipboard.writeText(t).then(() => toast("Copied the " + b.dataset.copy + "."), () => toast("Couldn’t copy. Select it in the form instead.")); }
+  catch (_) { toast("Couldn’t copy. Select it in the form instead."); }
+}));
+
+/* ---------- new issue ---------- */
+let armed = false;
+$("#btn-clear").addEventListener("click", e => {
+  const b = e.currentTarget;
+  if (!armed) {
+    armed = true; b.textContent = "Tap again to clear"; b.classList.add("danger-armed");
+    setTimeout(() => { if (armed) { armed = false; b.textContent = "Start a new issue"; b.classList.remove("danger-armed"); } }, 3500);
+    return;
+  }
+  armed = false; b.textContent = "Start a new issue"; b.classList.remove("danger-armed");
+  const n = (state.num || "").trim().replace(/^#/, "");
+  state = { stories: [{}], greeting: state.greeting || "", signer: state.signer || "", num: /^\d+$/.test(n) ? String(+n + 1) : "" };
+  load(); save(); window.scrollTo({ top: 0 }); toast("New issue started. Your greeting, signature and issue number carry over.");
+});
+
+/* ---------- phone view toggle ---------- */
+function setView(x) { $("#layout").dataset.view = x; $("#v-form").setAttribute("aria-pressed", x === "form"); $("#v-post").setAttribute("aria-pressed", x === "post"); window.scrollTo({ top: 0 }); }
+$("#v-form").onclick = () => setView("form");
+$("#v-post").onclick = () => setView("post");
+
+/* ---------- start ---------- */
+function load() {
+  if (!Array.isArray(state.stories) || !state.stories.length) state.stories = [{}];
+  document.querySelectorAll("[data-key]").forEach(el => { el.value = state[el.dataset.key] || ""; if (el.tagName === "TEXTAREA") autoGrow(el); });
+  renderStories(); render();
+}
+try { const s = JSON.parse(localStorage.getItem(STORE) || "null"); if (s && typeof s === "object") state = s; } catch (_) {}
+load();
+</script>
+</body>
+</html>
