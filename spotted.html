@@ -195,6 +195,8 @@ footer.note .addr { user-select: all; color: var(--ink); border-bottom: 1px soli
 .send-status { font-size: .85rem; color: var(--muted); margin: 14px auto 0; max-width: 52ch; }
 .send-status.ok { color: var(--rose-deep); }
 .req { color: var(--rose-deep); margin-left: 4px; }
+.selection { margin: 0 0 8px; padding: 14px 18px; border-radius: 18px; background: var(--blush); font-size: .9rem; color: var(--ink); max-width: 60ch; }
+.selection strong { color: var(--rose-deep); font-weight: 500; }
 #portrait-field { margin-top: 14px; border-top: 1px solid var(--silver-light); }
 .checks { display: grid; gap: 12px; padding-block: 8px 4px; }
 .field .check { display: flex; gap: 12px; align-items: flex-start; cursor: pointer; font: 300 .9rem/1.6 var(--sans); color: var(--ink); }
@@ -284,6 +286,7 @@ footer.note .addr { user-select: all; color: var(--ink); border-bottom: 1px soli
     <section class="card rim">
       <div class="card-head"><h2>Introduction</h2><span class="chip" id="chip-intro">0 / 2</span></div>
       <p class="hint">Welcome to Angels for Aid, a start-up nonprofit combining beauty, lifestyle and influencers with advocacy, intervention and humanitarian aid. Answer as much or as little as you like. Long answers are welcome, though not everything may fit on the blog.</p>
+      <p class="selection"><strong>Not every collab is featured.</strong> We choose angel advocates for how specific their cause is and for their passion for it. Show us that passion through detailed, thoughtful answers.</p>
       <div class="field"><label for="name">Name</label><span class="sub">First and last, only first, or a nickname</span><input type="text" id="name" data-key="name" placeholder="Your name or nickname"></div>
       <div class="row2">
         <div class="field"><label for="location">Location</label><span class="sub">State, country, whatever’s comfortable</span><input type="text" id="location" data-key="location" placeholder="e.g. Texas, USA"></div>
