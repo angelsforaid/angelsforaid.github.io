@@ -194,6 +194,12 @@ footer.note .addr { user-select: all; color: var(--ink); border-bottom: 1px soli
 .send-card .hint { margin-inline: auto; }
 .send-status { font-size: .85rem; color: var(--muted); margin: 14px auto 0; max-width: 52ch; }
 .send-status.ok { color: var(--rose-deep); }
+.req { color: var(--rose-deep); margin-left: 4px; }
+#portrait-field { margin-top: 14px; border-top: 1px solid var(--silver-light); }
+.checks { display: grid; gap: 12px; padding-block: 8px 4px; }
+.field .check { display: flex; gap: 12px; align-items: flex-start; cursor: pointer; font: 300 .9rem/1.6 var(--sans); color: var(--ink); }
+.check input[type=radio] { margin-top: 4px; width: 18px; height: 18px; accent-color: var(--rose-deep); flex: none; }
+.check strong { font-weight: 500; }
 .btn:disabled { opacity: .5; cursor: default; transform: none; box-shadow: none; }
 .btn .count { display: inline-block; min-width: 1.7em; margin-left: 8px; padding: 3px 6px; border-radius: 999px; background: var(--rose-deep); color: var(--white); letter-spacing: 0; font-variant-numeric: tabular-nums; }
 
@@ -306,6 +312,14 @@ footer.note .addr { user-select: all; color: var(--ink); border-bottom: 1px soli
       <label class="drop" id="drop" for="file"><strong>Add photos</strong><br>Tap to choose, or drop images here</label>
       <input type="file" id="file" accept="image/*" multiple hidden>
       <div class="thumbs" id="thumbs"></div>
+      <div class="field" id="portrait-field">
+        <span class="label-t">Would you like a self portrait with your feature?<span class="req">*</span></span>
+        <span class="sub">Our illustrator draws a portrait of you to go with your feature.</span>
+        <div class="checks" role="radiogroup" aria-label="Self portrait">
+          <label class="check"><input type="radio" name="portrait" value="Yes"> <span><strong>Yes, please.</strong> Features with a portrait can take up to 3 weeks to post.</span></label>
+          <label class="check"><input type="radio" name="portrait" value="No"> <span><strong>No, thanks.</strong> My feature will be posted as soon as possible.</span></label>
+        </div>
+      </div>
     </section>
 
     <section class="card rim send-card" id="send-card">
@@ -572,6 +586,7 @@ function applyState(s, touched = false, ph = []) {
     if (el.tagName === "TEXTAREA") autoGrow(el);
   });
   if (touched) $("#intro").value = state.intro || "";
+  document.querySelectorAll('input[name="portrait"]').forEach(r => { r.checked = r.value === state.portrait; });
   refreshHeadlineOptions();
   renderThumbs(); render();
 }
@@ -703,10 +718,12 @@ async function send() {
   if (state.__example) { toast("This is the example. Clear the form and add your own answers first."); return; }
   if (!val("name")) { toast("Add your name first so we know who you are."); $("#name").focus(); return; }
   if ($("#website").value) return;
+  if (!isTeam && !state.portrait) { toast("Please choose whether you’d like a self portrait."); $("#portrait-field").scrollIntoView({ block: "center" }); return; }
   if (!/^https:\/\/script\.google\.com\//.test(SCRIPT_URL)) { setSendStatus("Sending isn’t switched on yet. Please email your answers to angels4aid@gmail.com for now."); return; }
   sending = true; const btn = $("#btn-send"); btn.disabled = true; btn.textContent = "Sending…";
   setSendStatus(photos.length ? "Sending your answers and photos. This can take a little while…" : "Sending…");
-  const fields = { "Name": val("name"), "Location": val("location"), "Occupation": val("occupation"), "Instagram": val("instagram") ? "@" + igHandle() : "", "Cause": val("cause"), "Connection to the cause": val("connection") };
+  const fields = { "Name": val("name"), "Location": val("location"), "Occupation": val("occupation"), "Instagram": val("instagram") ? "@" + igHandle() : "", "Cause": val("cause"), "Connection to the cause": val("connection"),
+    "Self portrait": state.portrait === "Yes" ? "Yes (up to 3 weeks)" : state.portrait === "No" ? "No (post ASAP)" : "" };
   BEAUTY.forEach((q, i) => { fields[q] = val("b" + i); });
   CAUSE.forEach((q, i) => { fields[q] = val("c" + i); });
   const payload = {
@@ -728,6 +745,7 @@ async function send() {
   } finally { sending = false; if (btn.textContent === "Sent ✓") setTimeout(() => { btn.textContent = "Send again"; btn.disabled = false; }, 4000); }
 }
 $("#btn-send").addEventListener("click", send);
+document.querySelectorAll('input[name="portrait"]').forEach(r => r.addEventListener("change", () => { state.portrait = r.value; save(); }));
 
 $("#btn-load").addEventListener("click", () => {
   let d;
