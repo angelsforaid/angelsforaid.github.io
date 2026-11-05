@@ -196,7 +196,6 @@ footer.note .addr { user-select: all; color: var(--ink); border-bottom: 1px soli
 .send-status.ok { color: var(--rose-deep); }
 .selection { margin: 16px 0 0; padding: 14px 18px; border-radius: 18px; background: var(--blush); font-size: .9rem; color: var(--ink); }
 .selection strong { color: var(--rose-deep); font-weight: 500; }
-.check input[type=radio] { margin-top: 4px; width: 18px; height: 18px; accent-color: var(--rose-deep); flex: none; }
 .check strong { font-weight: 500; }
 .field .check { font: 300 .9rem/1.6 var(--sans); color: var(--ink); }
 .btn:disabled { opacity: .5; cursor: default; transform: none; box-shadow: none; }
@@ -327,14 +326,6 @@ footer.note .addr { user-select: all; color: var(--ink); border-bottom: 1px soli
       <div class="thumbs" id="thumbs"></div>
     </div>
     <div class="field"><label for="credits">Image credits</label><span class="sub">Optional. Who took the photos?</span><input type="text" id="credits" data-key="credits"></div>
-    <div class="field" id="portrait-field">
-      <span class="label-t">Would you like a self portrait with your piece?<span class="req">*</span></span>
-      <span class="sub">Our illustrator draws a portrait of you to go with your piece.</span>
-      <div class="checks" role="radiogroup" aria-label="Self portrait">
-        <label class="check"><input type="radio" name="portrait" value="Yes"> <span><strong>Yes, please.</strong> Pieces with a portrait can take up to 3 weeks to post.</span></label>
-        <label class="check"><input type="radio" name="portrait" value="No"> <span><strong>No, thanks.</strong> My piece will be posted as soon as possible.</span></label>
-      </div>
-    </div>
   </section>
 
   <section class="card rim send-card">
@@ -437,16 +428,13 @@ $("#form").addEventListener("submit", async e => {
   const need = [["name", "your name"], ["email", "your email"], ["social", "your Substack handle"], ["title", "a title"], ["learn", "what readers will learn"], ["why", "how you know about this"], ["body", "your piece"]].find(([k]) => !val(k));
   if (need) { toast("Please add " + need[1] + "."); $("#" + need[0]).focus(); return; }
   if (!/^\S+@\S+\.\S+$/.test(val("email"))) { toast("That email doesn’t look quite right."); $("#email").focus(); return; }
-  const portrait = document.querySelector('input[name="portrait"]:checked');
-  if (!portrait) { toast("Please choose whether you’d like a self portrait."); $("#portrait-field").scrollIntoView({ block: "center" }); return; }
   if (!state.okOriginal || !state.okEdit) { toast("Please tick both boxes so we can publish your piece."); return; }
   sending = true; const btn = $("#btn-send"); btn.disabled = true; btn.textContent = "Sending…";
   setStatus(photos.length ? "Sending your piece and images. This can take a little while…" : "Sending…");
   const fields = {
     "Name": val("name"), "Email": val("email"), "Substack handle": val("social"), "Location": val("location"),
     "Title": val("title"), "Subtitle": val("subtitle"), "Topic": val("topic"), "What readers will learn": val("learn"), "How they know about it": val("why"), "Word count": words(val("body")),
-    "Piece": val("body"), "Bio": val("bio"), "Image credits": val("credits"),
-    "Self portrait": portrait.value === "Yes" ? "Yes (up to 3 weeks)" : "No (post ASAP)"
+    "Piece": val("body"), "Bio": val("bio"), "Image credits": val("credits")
   };
   try {
     const res = await fetch(SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -473,10 +461,8 @@ $("#form").addEventListener("submit", async e => {
     if (el.type === "checkbox") el.checked = !!v; else el.value = v;
     if (el.tagName === "TEXTAREA") autoGrow(el);
   });
-  if (state.portrait) { const r = document.querySelector(`input[name="portrait"][value="${state.portrait}"]`); if (r) r.checked = true; }
   updateCount(); renderThumbs();
 })();
-document.querySelectorAll('input[name="portrait"]').forEach(r => r.addEventListener("change", () => { state.portrait = r.value; save(); }));
 </script>
 </body>
 </html>
