@@ -80,6 +80,6 @@ window.SITE = {
   //   { name: "Brand Name", url: "https://brand.com", logo: "images/brand.png" },
   brands: [
       { name: "Haloed", url: "http://haloed.store/", logo: "images/haloed.webp" },
-      { name: "hæl", url: "hael.app.", logo: "images/hael.webp" },
+      { name: "hæl", url: "https://.app.", logo: "images/hael.webp" },
   ]
 };
