@@ -79,5 +79,7 @@ window.SITE = {
   // The section stays hidden until at least one brand is listed. Example:
   //   { name: "Brand Name", url: "https://brand.com", logo: "images/brand.png" },
   brands: [
+      { name: "Haloed", url: "http://haloed.store/", logo: "images/brand.png" },
+      { name: "hæl", url: "hael.app.", logo: "images/brand.png" },
   ]
 };
