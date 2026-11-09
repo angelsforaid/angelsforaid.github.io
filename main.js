@@ -113,6 +113,17 @@
     document.querySelector('a[href="#collaborators"]')?.remove();
   }
 
+  // Brands we've worked with
+  const brands = S.brands || [];
+  if (brands.length) {
+    document.getElementById("brands-list").innerHTML = brands.map((b) => {
+      const inner = b.logo ? `<img src="${esc(b.logo)}" alt="${esc(b.name)}">` : `<span>${esc(b.name)}</span>`;
+      return b.url ? `<a class="brand-tile" href="${esc(b.url)}" ${ext}>${inner}</a>` : `<div class="brand-tile">${inner}</div>`;
+    }).join("");
+  } else {
+    document.getElementById("brands").remove();
+  }
+
   // Feathered wings behind the title (built from layered feathers)
   const wing = (side) => {
     const rows = [

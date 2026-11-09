@@ -339,6 +339,20 @@ h1, h2, h3 { margin: 0; font-weight: 300; }
 .pt-role { font: 400 .64rem/1.7 var(--sans); letter-spacing: .34em; text-transform: uppercase; color: var(--rose-deep); margin: 0 0 14px; }
 .pt-bio { font-size: .9rem; color: var(--muted); margin: 0; }
 
+/* ---------- brands ---------- */
+.section.brands { padding-top: 0; }
+.brand-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; max-width: 980px; margin: 0 auto; }
+.brand-tile {
+  display: grid; place-items: center; width: 190px; height: 96px; padding: 16px 22px; border-radius: 999px;
+  text-decoration: none; border: 1px solid transparent; box-shadow: var(--glow);
+  background: linear-gradient(rgba(255, 255, 255, .9), rgba(255, 255, 255, .9)) padding-box, var(--silver-border) border-box;
+  transition: transform .3s, box-shadow .3s;
+}
+a.brand-tile:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(233, 170, 195, .45); }
+.brand-tile img { max-width: 100%; max-height: 52px; object-fit: contain; filter: grayscale(1) contrast(.9); opacity: .8; transition: filter .3s, opacity .3s; }
+a.brand-tile:hover img { filter: none; opacity: 1; }
+.brand-tile span { font: 400 1.35rem/1.1 var(--display); color: var(--ink); text-align: center; letter-spacing: .04em; }
+
 /* ---------- collaborators: cameos ---------- */
 .cameos { display: flex; flex-wrap: wrap; justify-content: center; gap: 44px 36px; }
 .cameo { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 170px; text-decoration: none; text-align: center; }
