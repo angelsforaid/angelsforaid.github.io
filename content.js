@@ -64,15 +64,6 @@ window.SITE = {
 
   ],
 
-  // ---- Influencers & collaborators ----
-  // platform: "tiktok", "instagram", "substack" or "youtube"
-  collaborators: [
-    { name: "Kelly Anderson", handle: "@thekellyanderson", platform: "tiktok",    url: "https://www.tiktok.com/@thekellyanderson",   photo: "" },
-    { name: "Catherine Pinkos", handle: "@catherinepinknos", platform: "instagram", url: "https://www.instagram.com/catherinepinknos", photo: "" },
-    { name: "Phoenix", handle: "@phoenix.star07", platform: "tiktok",    url: "https://www.tiktok.com/@phoenix.star07",   photo: "" },
-    { name: "Serena Chappell", handle: "@serenachappell_", platform: "instagram", url: "https://www.instagram.com/serenachappell_", photo: "" }
-  ],
-
   // ---- Brands we've worked with ----
   // One line per brand. logo: put the image in the /images folder and write "images/brand.png",
   // or leave it "" to show the brand's name instead. url is optional.

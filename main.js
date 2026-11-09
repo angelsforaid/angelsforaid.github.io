@@ -96,23 +96,6 @@
   document.getElementById("board").innerHTML =
     (leads.length ? `<div class="board-lead">${leads.map(portrait).join("")}</div>` : "") + rest.map(portrait).join("");
 
-  // Collaborators, as cameos
-  const collabs = S.collaborators || [];
-  if (collabs.length) {
-    document.getElementById("collabs").innerHTML = collabs.map((c) => `
-      <a class="cameo" href="${esc(c.url)}" ${ext}>
-        <span class="cameo-pic">
-          <svg class="cameo-halo"><use href="#halo"/></svg>
-          ${photo(c, "cm-photo")}
-        </span>
-        <strong>${esc(c.name)}</strong>
-        <span class="cm-handle">${ICONS[c.platform] || ICONS.link}${esc(c.handle)}</span>
-      </a>`).join("");
-  } else {
-    document.getElementById("collaborators").remove();
-    document.querySelector('a[href="#collaborators"]')?.remove();
-  }
-
   // Brands we've worked with
   const brands = S.brands || [];
   if (brands.length) {

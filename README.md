@@ -6,7 +6,7 @@ A simple website: no build step, no server, and free to host on GitHub Pages.
 
 | File | What it is |
 |---|---|
-| `content.js` | **All the words, links, bios and collaborators. This is the only file you need to edit.** |
+| `content.js` | **All the words, links, bios and brands. This is the only file you need to edit.** |
 | `styles.css` | The look. Brand colors are at the very top, under `:root` |
 | `index.html` | Page structure |
 | `main.js` | Fills the page from `content.js`. You shouldn't need to touch it |
