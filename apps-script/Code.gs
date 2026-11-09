@@ -8,6 +8,9 @@
  *   write.html   → the "Newsletter pieces" tab, plus a folder for each piece (a formatted
  *                  Google Doc and its images) inside "Angels for Aid ✦ Pieces"
  *
+ * Sending again replaces that person's earlier submission (same Instagram or name for spotted,
+ * same email and title for pieces): their row is updated and the old folder goes to the Drive trash.
+ *
  * After pasting a new version, run "tidy" once to neaten the tabs you already have.
  */
 const FORMS = {
@@ -15,7 +18,7 @@ const FORMS = {
     sheet: "Submissions",
     folder: "Angels for Aid ✦ Angels spotted",
     first: ["Sent", "Status", "Read it", "Folder", "Name", "Location", "Occupation", "Instagram", "Cause", "Connection to the cause"],
-    last: ["Photos", "Formatted post", "Submission code"],
+    last: ["Photos", "Formatted post", "Submission code", "Match key"],
     statuses: ["New", "Posted"],
     narrow: { "Sent": 140, "Status": 110, "Read it": 110, "Folder": 110, "Name": 150, "Location": 140, "Instagram": 140, "Cause": 180 },
     maxPhotos: 8
@@ -24,7 +27,7 @@ const FORMS = {
     sheet: "Newsletter pieces",
     folder: "Angels for Aid ✦ Pieces",
     first: ["Sent", "Status", "Read it", "Folder", "Title", "Name", "Topic", "Word count", "Email", "Substack handle", "Location", "Subtitle"],
-    last: ["Piece", "Bio", "Images", "Image credits", "Ready for Substack"],
+    last: ["Piece", "Bio", "Images", "Image credits", "Ready for Substack", "Match key"],
     statuses: ["New", "Reviewing", "Scheduled", "Published", "Declined"],
     narrow: { "Sent": 140, "Status": 120, "Read it": 110, "Folder": 110, "Title": 260, "Name": 150, "Topic": 170, "Word count": 100, "Email": 200 },
     maxPhotos: 4
@@ -62,7 +65,7 @@ function doPost(e) {
     });
     const photoLinks = files.map(f => f.getUrl()).join("\n");
 
-    const values = Object.assign({}, fields, { "Sent": new Date(), "Status": "New" });
+    const values = Object.assign({}, fields, { "Sent": new Date(), "Status": "New", "Match key": matchKey(d.type, d.fields || {}) });
     const docUrl = d.type === "piece" ? makePieceDoc(d.fields || {}, files, folder) : makeSpottedDoc(d.fields || {}, files, folder);
     values["Read it"] = `=HYPERLINK("${docUrl}","Open the doc")`;
     values["Folder"] = `=HYPERLINK("${folder.getUrl()}","Open folder")`;
@@ -82,11 +85,20 @@ function doPost(e) {
     const sheet = getSheet(form);
     renameHeader(sheet, "Instagram / TikTok", "Substack handle");
     const headers = ensureHeaders(sheet, Object.keys(values), form.last[0]);
-    sheet.appendRow(headers.map(h => (h in values ? values[h] : "")));
-    formatRows(sheet, sheet.getLastRow(), 1);
+    const row = findRow(sheet, headers, values["Match key"]);
+    if (row) {
+      // Sent before: keep their Status, swap in the new answers, and trash the old folder.
+      values["Status"] = sheet.getRange(row, headers.indexOf("Status") + 1).getValue() || "New";
+      trashOldFolder(sheet.getRange(row, headers.indexOf("Folder") + 1).getFormula(), folder.getId());
+      sheet.getRange(row, 1, 1, headers.length).setValues([headers.map(h => (h in values ? values[h] : ""))]);
+      formatRows(sheet, row, 1);
+    } else {
+      sheet.appendRow(headers.map(h => (h in values ? values[h] : "")));
+      formatRows(sheet, sheet.getLastRow(), 1);
+    }
     return reply({ ok: true });
   } catch (err) {
-    return reply({ ok: false, error: String(err) + " [v4] " + String(err.stack || "").split("\n").slice(0, 3).join(" ") });
+    return reply({ ok: false, error: String(err) + " [v5] " + String(err.stack || "").split("\n").slice(0, 3).join(" ") });
   } finally {
     lock.releaseLock();
   }
@@ -98,7 +110,29 @@ function doGet() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const tabs = ss.getSheets().map(s => `  ${s.getName()} (${s.getLastColumn()} columns)`).join("\n");
   return ContentService.createTextOutput(
-    `Angels for Aid form receiver is running ✦ (v4)\n\nSpreadsheet: ${ss.getName()}\nTabs:\n${tabs}`);
+    `Angels for Aid form receiver is running ✦ (v5)\n\nSpreadsheet: ${ss.getName()}\nTabs:\n${tabs}`);
+}
+
+/* ---------- spotting a repeat submission ---------- */
+// Spotted: same Instagram (or same name if no Instagram). Pieces: same email and title.
+function matchKey(type, f) {
+  const norm = v => String(v || "").trim().toLowerCase().replace(/^'?@?/, "").replace(/\s+/g, " ");
+  if (type === "piece") return "piece:" + norm(f["Email"]) + "|" + norm(f["Title"]);
+  return f["Instagram"] ? "ig:" + norm(f["Instagram"]) : "name:" + norm(f["Name"]);
+}
+
+function findRow(sheet, headers, key) {
+  const col = headers.indexOf("Match key") + 1, last = sheet.getLastRow();
+  if (!col || !key || last < 2) return 0;
+  const keys = sheet.getRange(2, col, last - 1, 1).getValues();
+  for (let i = keys.length - 1; i >= 0; i--) if (keys[i][0] === key) return i + 2;
+  return 0;
+}
+
+function trashOldFolder(formula, keepId) {
+  const m = String(formula || "").match(/folders\/([\w-]+)/);
+  if (!m || m[1] === keepId) return;
+  try { DriveApp.getFolderById(m[1]).setTrashed(true); } catch (_) {}
 }
 
 function reply(obj) {
@@ -260,6 +294,22 @@ function setup() {
   });
 }
 
+// Gives rows sent before "Match key" existed a key, so a resend from that person replaces them too.
+function backfillKeys(sheet, type) {
+  const headers = ensureHeaders(sheet, ["Match key"], FORMS[type].last[0]);
+  const last = sheet.getLastRow();
+  if (last < 2) return;
+  const rows = sheet.getRange(2, 1, last - 1, headers.length).getValues();
+  const col = headers.indexOf("Match key");
+  const keys = rows.map(r => {
+    if (r[col]) return [r[col]];
+    const f = {};
+    headers.forEach((h, i) => { f[h] = r[i]; });
+    return [matchKey(type, f)];
+  });
+  sheet.getRange(2, col + 1, keys.length, 1).setValues(keys);
+}
+
 /** Run this once after updating the script to neaten the tabs you already have. */
 function tidy() {
   setup();
@@ -268,6 +318,7 @@ function tidy() {
     const form = FORMS[k], sheet = ss.getSheetByName(form.sheet);
     if (!sheet) return;
     ensureHeaders(sheet, ["Read it", "Folder"], form.first[4]);
+    backfillKeys(sheet, k);
     layout(sheet, form);
   });
 }
