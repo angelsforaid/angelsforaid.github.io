@@ -292,6 +292,7 @@ footer.note .addr { user-select: all; color: var(--ink); border-bottom: 1px soli
         <div class="field"><label for="location">Location</label><span class="sub">State, country, whatever’s comfortable</span><input type="text" id="location" data-key="location" placeholder="e.g. Texas, USA"></div>
         <div class="field"><label for="instagram">Instagram</label><span class="sub">Optional</span><input type="text" id="instagram" data-key="instagram" placeholder="@yourhandle"></div>
       </div>
+      <div class="field"><label for="substack">Substack handle<span class="req">*</span></label><span class="sub">Find it on your Substack profile. No Substack yet? A free account takes a minute at substack.com.</span><input type="text" id="substack" data-key="substack" placeholder="@yourhandle"></div>
       <div class="field"><label for="occupation">What do you do?</label><span class="sub">Job or education, include your major or aspired major. Finish the sentence “I am currently…”</span><input type="text" id="occupation" data-key="occupation" placeholder="a mass media arts student at Clark Atlanta University"></div>
     </section>
 
@@ -509,6 +510,7 @@ function parseOrgs() {
     return { name, url };
   });
 }
+function ssHandle() { return val("substack").replace(/^https?:\/\/(www\.)?substack\.com\/@?/i, "").replace(/^@+/, "").replace(/[\/?#].*$/, ""); }
 function igHandle() { const h = val("instagram").replace(/^@+/, "").replace(/^https?:\/\/(www\.)?instagram\.com\//i, "").replace(/\/.*$/, ""); return h; }
 
 /* ---------- post builder ---------- */
@@ -528,8 +530,9 @@ function buildPost(withPhotos = true) {
   CAUSE.forEach((q, i) => { if (val("c" + i)) html += qa(q, val("c" + i)); });
   const orgs = parseOrgs();
   if (orgs.length) html += `<h4>Organizations that aid this cause:</h4><ul>${orgs.map(o => `<li>${o.url ? `<a href="${esc(o.url)}">${esc(o.name)}</a>` : esc(o.name)}</li>`).join("")}</ul>`;
-  const ig = igHandle();
-  if (ig) html += `<p>Find ${esc(first)} on Instagram at <a href="https://www.instagram.com/${esc(ig)}">@${esc(ig)}</a></p>`;
+  const ig = igHandle(), ss = ssHandle();
+  const finds = [ig ? `on Instagram at <a href="https://www.instagram.com/${esc(ig)}">@${esc(ig)}</a>` : "", ss ? `on Substack at <a href="https://substack.com/@${esc(ss)}">@${esc(ss)}</a>` : ""].filter(Boolean);
+  if (finds.length) html += `<p>Find ${esc(first)} ${finds.join(" and ")}</p>`;
   return html;
 }
 function buildText() {
@@ -543,7 +546,8 @@ function buildText() {
   CAUSE.forEach((q, i) => { if (val("c" + i)) L.push(q, quote(val("c" + i)), ""); });
   const orgs = parseOrgs();
   if (orgs.length) { L.push("Organizations that aid this cause:"); orgs.forEach(o => L.push("• " + o.name + (o.url && o.url !== o.name ? " – " + o.url : ""))); L.push(""); }
-  if (igHandle()) L.push(`Find ${first} on Instagram at @${igHandle()}`);
+  const finds = [igHandle() ? `on Instagram at @${igHandle()}` : "", ssHandle() ? `on Substack at @${ssHandle()}` : ""].filter(Boolean);
+  if (finds.length) L.push(`Find ${first} ${finds.join(" and ")}`);
   return L.join("\n").trim();
 }
 
@@ -721,11 +725,12 @@ async function send() {
   if (state.__example) { toast("This is the example. Clear the form and add your own answers first."); return; }
   if (!val("name")) { toast("Add your name first so we know who you are."); $("#name").focus(); return; }
   if ($("#website").value) return;
+  if (!isTeam && !ssHandle()) { toast("Please add your Substack handle."); $("#substack").focus(); return; }
   if (!isTeam && !state.portrait) { toast("Please choose whether you’d like a self portrait."); $("#portrait-field").scrollIntoView({ block: "center" }); return; }
   if (!/^https:\/\/script\.google\.com\//.test(SCRIPT_URL)) { setSendStatus("Sending isn’t switched on yet. Please email your answers to angels4aid@gmail.com for now."); return; }
   sending = true; const btn = $("#btn-send"); btn.disabled = true; btn.textContent = "Sending…";
   setSendStatus(photos.length ? "Sending your answers and photos. This can take a little while…" : "Sending…");
-  const fields = { "Name": val("name"), "Location": val("location"), "Occupation": val("occupation"), "Instagram": val("instagram") ? "@" + igHandle() : "", "Cause": val("cause"), "Connection to the cause": val("connection"),
+  const fields = { "Name": val("name"), "Location": val("location"), "Occupation": val("occupation"), "Instagram": val("instagram") ? "@" + igHandle() : "", "Substack handle": ssHandle() ? "@" + ssHandle() : "", "Cause": val("cause"), "Connection to the cause": val("connection"),
     "Self portrait": state.portrait === "Yes" ? "Yes (up to 3 weeks)" : state.portrait === "No" ? "No (post ASAP)" : "" };
   BEAUTY.forEach((q, i) => { fields[q] = val("b" + i); });
   CAUSE.forEach((q, i) => { fields[q] = val("c" + i); });
