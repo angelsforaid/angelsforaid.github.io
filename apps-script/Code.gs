@@ -310,6 +310,40 @@ function backfillKeys(sheet, type) {
   sheet.getRange(2, col + 1, keys.length, 1).setValues(keys);
 }
 
+/**
+ * Run this once to clear out repeat submissions already in the Sheet. For each person it keeps
+ * the newest row, deletes their older rows, and moves those older folders to the Drive trash.
+ * (Drive keeps trashed items for 30 days.)
+ */
+function removeDuplicates() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const report = [];
+  Object.keys(FORMS).forEach(k => {
+    const sheet = ss.getSheetByName(FORMS[k].sheet);
+    if (!sheet || sheet.getLastRow() < 3) return;
+    backfillKeys(sheet, k);
+    const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+    const keyCol = headers.indexOf("Match key"), sentCol = headers.indexOf("Sent"), folderCol = headers.indexOf("Folder");
+    const n = sheet.getLastRow() - 1;
+    const rows = sheet.getRange(2, 1, n, headers.length).getValues();
+    const formulas = sheet.getRange(2, folderCol + 1, n, 1).getFormulas();
+    // Newest row for each key: the latest "Sent" time, or the lowest row if times tie.
+    const newest = {};
+    rows.forEach((r, i) => {
+      const key = r[keyCol]; if (!key) return;
+      const t = r[sentCol] instanceof Date ? r[sentCol].getTime() : 0;
+      if (!(key in newest) || t >= newest[key].t) newest[key] = { i, t };
+    });
+    const drop = rows.map((r, i) => i).filter(i => rows[i][keyCol] && newest[rows[i][keyCol]].i !== i);
+    drop.reverse().forEach(i => {   // bottom up, so row numbers stay right
+      trashOldFolder(formulas[i][0], "");
+      sheet.deleteRow(i + 2);
+    });
+    report.push(`${FORMS[k].sheet}: removed ${drop.length} older ${drop.length === 1 ? "copy" : "copies"}`);
+  });
+  Logger.log(report.join("\n") || "Nothing to clean up.");
+}
+
 /** Run this once after updating the script to neaten the tabs you already have. */
 function tidy() {
   setup();
