@@ -146,4 +146,12 @@
   email.href = `mailto:${S.email}`;
   email.textContent = S.email;
   document.getElementById("year").textContent = new Date().getFullYear();
+
+  // Phone menu: the ☰ button opens it, picking a link or tapping elsewhere closes it
+  const nav = document.getElementById("nav"), menuBtn = document.getElementById("menu-btn");
+  const setMenu = (open) => { nav.classList.toggle("open", open); menuBtn.setAttribute("aria-expanded", open); };
+  menuBtn.addEventListener("click", (e) => { e.stopPropagation(); setMenu(!nav.classList.contains("open")); });
+  nav.addEventListener("click", (e) => { if (e.target.closest("a")) setMenu(false); });
+  document.addEventListener("click", (e) => { if (!nav.contains(e.target)) setMenu(false); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") setMenu(false); });
 })();

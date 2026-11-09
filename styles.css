@@ -395,15 +395,38 @@ a.brand-tile:hover img { filter: none; opacity: 1; }
 /* ---------- the menu stays on one line; on smaller screens the banner buttons take over ---------- */
 .nav { gap: 24px; }
 .nav a { white-space: nowrap; letter-spacing: .2em; }
+.menu-btn { display: none; }
 @media (max-width: 1120px) {
-  .nav { display: none; }
+  .header-inner { position: relative; }
   .header-inner .icon-row { margin-left: auto; }
+  /* ☰ button, turning into an × while the menu is open */
+  .menu-btn {
+    display: grid; align-content: center; gap: 5px; width: 40px; height: 40px; padding: 0 10px; flex: none;
+    border: 1px solid transparent; border-radius: 50%; cursor: pointer; color: var(--silver-dark);
+    background: linear-gradient(var(--white), var(--white)) padding-box, var(--silver-border) border-box;
+  }
+  .menu-btn span { display: block; height: 1.5px; background: currentColor; border-radius: 2px; transition: transform .25s, opacity .2s; }
+  .menu-btn[aria-expanded="true"] span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .menu-btn[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+  .menu-btn[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+  /* the menu drops down under the header */
+  .nav {
+    display: none; position: absolute; top: 100%; right: 0; left: 0; margin: 0;
+    flex-direction: column; gap: 0; padding: 8px 20px 16px;
+    background: rgba(255, 250, 252, .97); border-bottom: 1px solid rgba(196, 196, 208, .4);
+    box-shadow: 0 18px 30px rgba(201, 140, 165, .18);
+  }
+  .nav.open { display: flex; }
+  .nav a { padding: 16px 0; font-size: .78rem; border-bottom: 1px solid rgba(196, 196, 208, .25); }
+  .nav a:last-child { border-bottom: 0; }
+}
+@media (max-width: 520px) {
+  .header-inner .icon-row { display: none; }
+  .menu-btn { margin-left: auto; }
 }
 
 /* ---------- phones ---------- */
 @media (max-width: 820px) {
-  .nav { display: none; }
-  .header-inner .icon-row { margin-left: auto; }
   .brand-word { letter-spacing: .22em; font-size: 1.05rem; }
   .about, .letter-grid, .involve { grid-template-columns: 1fr; }
   .about { text-align: center; }
