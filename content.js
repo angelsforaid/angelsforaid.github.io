@@ -17,11 +17,10 @@ window.SITE = {
   // Words that scroll across the pink bar at the very top of the page
   ticker: [
     "fashion is political!",
-    "dress loud, speak louder",
-    "angels for aid",
-    "read our weekly newsletter!",
+    "get involved with us",
+    "read our weekly newsletter",
     "subscribe to our substack",
-    "style with substance"
+    "become an angel today"
   ],
 
   // The three tags in the "about us" section
