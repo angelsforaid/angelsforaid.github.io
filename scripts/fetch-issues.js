@@ -5,7 +5,7 @@ const fs = require("fs");
 const window = {};
 new Function("window", fs.readFileSync("content.js", "utf8"))(window);
 const sub = (window.SITE.socials?.substack?.url || "").replace(/\/$/, "");
-const MAX = 5;
+const MAX = 3;
 
 const decode = (s) => s
   .replace(/^<!\[CDATA\[([\s\S]*?)\]\]>$/, "$1")
