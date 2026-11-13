@@ -41,7 +41,8 @@ window.SITE = {
   newsletter: {
     showSignup: true, // shows Substack's own email sign-up box
     blurb: "Our weekly newsletter, with stories, style and ways to help, delivered to your inbox.",
-    // Add each new issue at the TOP of this list. Leave it empty [] to hide this part.
+    // New Substack posts now show up on the homepage by themselves (a few hours after publishing).
+    // This list is only a backup, shown if that automatic list can't load.
     issues: [
       {
         title: "Angel’s Collection: Socio-Political Works of Fiction",

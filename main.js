@@ -65,19 +65,25 @@
   } else if (sub) {
     signup.innerHTML = `<a class="btn btn-pearl" href="${esc(sub)}" ${ext}>Subscribe on Substack</a>`;
   }
-  const issues = S.newsletter?.issues || [];
-  if (issues.length) {
+  // Latest issues: issues.json is refreshed from Substack automatically (see scripts/fetch-issues.js).
+  // The list in content.js shows until that file exists, or if it can't be loaded.
+  function showIssues(issues) {
+    if (!issues.length) { document.getElementById("issues-wrap")?.remove(); return; }
     document.getElementById("issues").innerHTML = issues.map((i) => `
       <li><a href="${esc(i.url)}" ${ext}>
-        <time datetime="${esc(i.date)}">${esc(new Date(i.date + "T12:00").toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }))}</time>
+        ${i.date ? `<time datetime="${esc(i.date)}">${esc(new Date(i.date + "T12:00").toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }))}</time>` : ""}
         <strong>${esc(i.title)}</strong>
         ${i.summary ? `<span>${esc(i.summary)}</span>` : ""}
       </a></li>`).join("");
     const archive = document.getElementById("archive-link");
     if (sub) archive.href = `${sub}/archive`; else archive.remove();
-  } else {
-    document.getElementById("issues-wrap").remove();
   }
+  const manual = S.newsletter?.issues || [];
+  if (manual.length) showIssues(manual);
+  fetch("issues.json", { cache: "no-cache" })
+    .then((r) => (r.ok ? r.json() : Promise.reject()))
+    .then((list) => { if (Array.isArray(list) && list.length) showIssues(list); else if (!manual.length) showIssues([]); })
+    .catch(() => { if (!manual.length) showIssues([]); });
 
   // Editorial board, as arched portraits
   const board = S.board || [];
