@@ -46,6 +46,12 @@ window.SITE = {
     // are left out of our feed. The homepage shows the 3 newest from both lists, by date.
     issues: [
       {
+        title: "Bunnies and Beauty",
+        date: "2026-11-11",
+        url: "https://substack.com/home/post/p-224499740",
+        summary: "A collaboration with Pace Robbins"
+      },
+      {
         title: "Angel’s Collection: Socio-Political Works of Fiction",
         date: "2026-10-28",
         url: "https://substack.com/home/post/p-222568560",
