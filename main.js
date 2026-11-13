@@ -78,12 +78,19 @@
     const archive = document.getElementById("archive-link");
     if (sub) archive.href = `${sub}/archive`; else archive.remove();
   }
+  // Posts added by hand in content.js (like collabs, which Substack leaves out of the feed)
+  // are mixed in with the automatic ones, newest first.
   const manual = S.newsletter?.issues || [];
-  if (manual.length) showIssues(manual);
+  const newest = (list) => {
+    const seen = new Set();
+    return list.filter((i) => i && i.url && !seen.has(i.url) && seen.add(i.url))
+      .sort((a, b) => String(b.date || "").localeCompare(String(a.date || ""))).slice(0, 3);
+  };
+  showIssues(newest(manual));
   fetch("issues.json", { cache: "no-cache" })
-    .then((r) => (r.ok ? r.json() : Promise.reject()))
-    .then((list) => { if (Array.isArray(list) && list.length) showIssues(list); else if (!manual.length) showIssues([]); })
-    .catch(() => { if (!manual.length) showIssues([]); });
+    .then((r) => (r.ok ? r.json() : []))
+    .then((list) => showIssues(newest((Array.isArray(list) ? list : []).concat(manual))))
+    .catch(() => {});
 
   // Editorial board, as arched portraits
   const board = S.board || [];

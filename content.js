@@ -41,8 +41,9 @@ window.SITE = {
   newsletter: {
     showSignup: true, // shows Substack's own email sign-up box
     blurb: "Our weekly newsletter, with stories, style and ways to help, delivered to your inbox.",
-    // New Substack posts now show up on the homepage by themselves (a few hours after publishing).
-    // This list is only a backup, shown if that automatic list can't load.
+    // New Substack posts show up on the homepage by themselves (a few hours after publishing).
+    // Add a post here only if it doesn't: collab posts published on someone else's Substack
+    // are left out of our feed. The homepage shows the 3 newest from both lists, by date.
     issues: [
       {
         title: "Angel’s Collection: Socio-Political Works of Fiction",
